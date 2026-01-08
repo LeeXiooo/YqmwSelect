@@ -15,6 +15,8 @@
         function initDebug1(){
             $('#yqmwDebug1').YqmwSelect({
                 DateTypes: {
+                    AllValue: 0,
+                    AllShow: true,                    
                     YearValue: 5,
                     YearShow: true,
                     QuarterValue: 4,
@@ -26,7 +28,7 @@
                     DayValue: 1,
                     DayShow: true
                 },
-                DateType: 5,
+                DateType: 0,
                 //DateValObjID: 'demoDateBox',
                 //LastNowNextBtnObjID: 'demoDateButton',
                 ShowLastNowNextBtn: true,
@@ -36,8 +38,13 @@
                 ReadOnly: false,
                 CallMethod: function(){
                     console.log(new Date().getTime() + ' CallMethod called for ' + this.id);
-                    $.messager.alert({ 
+                    $.messager.show({ 
                         title: 'ok',
+                        style:{
+                            right:'',
+                            top:'',
+                            bottom:-document.body.scrollTop-document.documentElement.scrollTop
+                        },                        
                         msg: 'Method Called...'+this.id
                     });
                 }

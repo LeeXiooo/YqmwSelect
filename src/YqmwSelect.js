@@ -9,15 +9,17 @@
     "use strict";
     var defaults = {
         DateTypes: {
-            YearValue: 5,                      //类型配置年
+            AllValue: 0,                    //类型配置全
+            AllShow: true,
+            YearValue: 5,                   //类型配置年
             YearShow: true,
-            QuarterValue: 4,
+            QuarterValue: 4,                //类型配置季度  
             QuarterShow: true,
-            MonthValue: 3,
+            MonthValue: 3,                  //类型配置月
             MonthShow: true,
-            WeekValue: 2,
+            WeekValue: 2,                   //类型配置周
             WeekShow: true,
-            DayValue: 1,
+            DayValue: 1,                    //类型配置日
             DayShow: false
         },
         DefaultValueYear: undefined,        //年默认值,可选
@@ -38,63 +40,10 @@
  
     function createSelect(target) {
         var opts = $.data(target, 'YqmwSelect').options;
+        var dt = opts.DateType;
         var t = $(target);
-
-        if (opts.ShowDateType) {
-
-            var switchradio = opts.DateTypeObjID ? $('#' + opts.DateTypeObjID) : t;
-            var dt = opts.DateType;
-            var dtn = 'YqmwRadio-' + switchradio.attr('id');
-            var ro = opts.ReadOnly;
-
-            var str = '';
-
-            if (opts.DateTypes.DayShow) {
-                str += '<label for="' + dtn + '0"><input type="radio" name="' + dtn + '" id="' + dtn + '0" ' +
-                    (dt === opts.DateTypes.DayValue ? 'checked="checked"' : '')
-                    + ' value="' + opts.DateTypes.DayValue + '" />日</label> ';
-            }
-
-
-            if (opts.DateTypes.WeekShow) {
-                str += '<label for="' + dtn + '1"><input type="radio" name="' + dtn + '" id="' + dtn + '1" ' +
-                    (dt === opts.DateTypes.WeekValue ? 'checked="checked"' : '')
-                    + ' value="' + opts.DateTypes.WeekValue + '" />周</label> ';
-            }
-            if (opts.DateTypes.MonthShow) {
-                str += '<label for="' + dtn + '2"><input type="radio" name="' + dtn + '" id="' + dtn + '2" ' +
-                    (dt === opts.DateTypes.MonthValue ? 'checked="checked"' : '')
-                    + ' value="' + opts.DateTypes.MonthValue + '" />月</label> ';
-            }
-
-            if (opts.DateTypes.QuarterShow) {
-                str += '<label for="' + dtn + '3"><input type="radio" name="' + dtn + '" id="' + dtn + '3" ' +
-                    (dt === opts.DateTypes.QuarterValue ? 'checked="checked"' : '')
-                    + ' value="' + opts.DateTypes.QuarterValue + '" />季</label> ';
-            }
-
-            if (opts.DateTypes.YearShow) {
-                str += '<label for="' + dtn + '4"><input type="radio" name="' + dtn + '" id="' + dtn + '4" ' +
-                    (dt === opts.DateTypes.YearValue ? 'checked="checked"' : '')
-                    + ' value="' + opts.DateTypes.YearValue + '" />年</label> ';
-            }
-
-            switchradio.append(str);
-
-            if (!ro) {
-                switchradio.find('input[name="' + dtn + '"]').unbind('click');
-                switchradio.find('input[name="' + dtn + '"]').click(function () {
-                    var switchradio = opts.DateTypeObjID ? $('#' + opts.DateTypeObjID) : t;
-                    var dtn = 'YqmwRadio-' + switchradio.attr('id');
-                    var setdt = parseInt(switchradio.find('input[name="' + dtn + '"]:checked').val());
-
-                    _changeType(target, setdt);
-                });
-            }
-            else {
-                switchradio.find('input[name="' + dtn + '"]').attr('disabled', ro);
-            }
-        }
+        
+        _renderDateTypeRadio(target,opts);
 
         var box = opts.DateValObjID ? $('#' + opts.DateValObjID) : t;
 
@@ -136,26 +85,99 @@
             box.find('.spanDateVal').hide();
             box.find('.spanDayVal').show(); 
         }
+        else if (dt === opts.DateTypes.AllValue) {
+            box.find('.spanYear').hide();
+            box.find('.spanDateVal').hide(); 
+            box.find('.spanDayVal').hide();
+        }
         else {
             box.find('.spanDayVal').hide(); 
             box.find('.spanYear').show(); 
             if (opts.DateType === opts.DateTypes.YearValue) {
-                box.find('.spanDateVal').hide(); 
-               
+                box.find('.spanDateVal').hide();               
             }
             else {
                 box.find('.spanDateVal').show(); 
             }
-        }
-
+        }        
         if (opts.ShowLastNowNextBtn) {
-            var lastnownext = opts.LastNowNextBtnObjID ? $('#' + opts.LastNowNextBtnObjID) : t;
+            var lastnownext;
+            if(opts.LastNowNextBtnObjID){
+                lastnownext = $('#' + opts.LastNowNextBtnObjID);
+            }else{
+                t.append('<span id="'+t.id+'-lastnownextbtn"></span>');
+                lastnownext = $('#'+t.id + '-lastnownextbtn');
+            }
+            //var lastnownext = opts.LastNowNextBtnObjID ? $('#' + opts.LastNowNextBtnObjID) : t;
             lastnownext.append('<a class="Yqmw-btnlast">上</a> <a class="Yqmw-btnnow">本</a> <a class="Yqmw-btnnext">下</a>');
             _renderLastNextBtn(target);
+            if (opts.DateType === opts.DateTypes.AllValue) {
+                lastnownext.hide();
+            }
         }
-
         _initValue(target);
+    }
 
+    function _renderDateTypeRadio(target,opts) {
+        var t = $(target);
+        if (opts.ShowDateType) {
+            var switchradio = opts.DateTypeObjID ? $('#' + opts.DateTypeObjID) : t;
+            var dt = opts.DateType;
+            var dtn = 'YqmwRadio-' + switchradio.attr('id');
+            var ro = opts.ReadOnly;
+
+            var str = '';
+            if(opts.DateTypes.AllShow){
+            str += '<label for="' + dtn + '5"><input type="radio" name="' + dtn + '" id="' + dtn + '5" ' +
+                (dt === opts.DateTypes.AllValue ? 'checked="checked"' : '')
+                + ' value="' + opts.DateTypes.AllValue + '" />全</label> ';
+            }
+
+            if (opts.DateTypes.DayShow) {
+                str += '<label for="' + dtn + '0"><input type="radio" name="' + dtn + '" id="' + dtn + '0" ' +
+                    (dt === opts.DateTypes.DayValue ? 'checked="checked"' : '')
+                    + ' value="' + opts.DateTypes.DayValue + '" />日</label> ';
+            }
+
+            if (opts.DateTypes.WeekShow) {
+                str += '<label for="' + dtn + '1"><input type="radio" name="' + dtn + '" id="' + dtn + '1" ' +
+                    (dt === opts.DateTypes.WeekValue ? 'checked="checked"' : '')
+                    + ' value="' + opts.DateTypes.WeekValue + '" />周</label> ';
+            }
+            if (opts.DateTypes.MonthShow) {
+                str += '<label for="' + dtn + '2"><input type="radio" name="' + dtn + '" id="' + dtn + '2" ' +
+                    (dt === opts.DateTypes.MonthValue ? 'checked="checked"' : '')
+                    + ' value="' + opts.DateTypes.MonthValue + '" />月</label> ';
+            }
+
+            if (opts.DateTypes.QuarterShow) {
+                str += '<label for="' + dtn + '3"><input type="radio" name="' + dtn + '" id="' + dtn + '3" ' +
+                    (dt === opts.DateTypes.QuarterValue ? 'checked="checked"' : '')
+                    + ' value="' + opts.DateTypes.QuarterValue + '" />季</label> ';
+            }
+
+            if (opts.DateTypes.YearShow) {
+                str += '<label for="' + dtn + '4"><input type="radio" name="' + dtn + '" id="' + dtn + '4" ' +
+                    (dt === opts.DateTypes.YearValue ? 'checked="checked"' : '')
+                    + ' value="' + opts.DateTypes.YearValue + '" />年</label> ';
+            }
+
+            switchradio.append(str);
+
+            if (!ro) {
+                switchradio.find('input[name="' + dtn + '"]').unbind('click');
+                switchradio.find('input[name="' + dtn + '"]').click(function () {
+                    var switchradio = opts.DateTypeObjID ? $('#' + opts.DateTypeObjID) : t;
+                    var dtn = 'YqmwRadio-' + switchradio.attr('id');
+                    var setdt = parseInt(switchradio.find('input[name="' + dtn + '"]:checked').val());
+
+                    _changeType(target, setdt);
+                });
+            }
+            else {
+                switchradio.find('input[name="' + dtn + '"]').attr('disabled', ro);
+            }
+        }
     }
 
     function _renderLastNextBtn(target) {
@@ -169,7 +191,14 @@
             return false;
         }
 
-        var lastnownext = opts.LastNowNextBtnObjID ? $('#' + opts.LastNowNextBtnObjID) : t;
+        var lastnownext = opts.LastNowNextBtnObjID ? $('#' + opts.LastNowNextBtnObjID) : $('#'+t.id + '-lastnownextbtn');
+
+        if (dt === opts.DateTypes.AllValue) {
+            lastnownext.hide();
+            return false;
+        } else {
+            lastnownext.show();
+        }
 
  
         var objbtnLast = lastnownext.find('a.Yqmw-btnlast');
@@ -253,6 +282,10 @@
         var t = $(target);
         var dt = opts.DateType;
 
+        if (dt === opts.DateTypes.AllValue) {
+            return false;
+        }
+
         var box = opts.DateValObjID ? $('#' + opts.DateValObjID) : t;
 
         var objYear = box.find('input.YqmwYear');
@@ -286,7 +319,7 @@
         if (!opts.ShowLastNowNextBtn) {
             return false;
         }
-        var lastnownext = opts.LastNowNextBtnObjID ? $('#' + opts.LastNowNextBtnObjID) : t;
+        var lastnownext = opts.LastNowNextBtnObjID ? $('#' + opts.LastNowNextBtnObjID) : $('#'+t.id + '-lastnownextbtn');
         var objbtnNow = lastnownext.find('a.Yqmw-btnnow');
         objbtnNow.linkbutton(iscurr ? 'disable' : 'enable');
         if (iscurr) {
@@ -315,9 +348,15 @@
         if (!opts.DateInfoObjID) {
             return false;
         }
- 
-        $('#'+opts.DateInfoObjID).text(_dateformatter(_getStartDate(target))
+
+        var dt = opts.DateType;
+
+        if (dt === opts.DateTypes.AllValue) {
+            $('#'+opts.DateInfoObjID).text('');
+        }else{
+            $('#'+opts.DateInfoObjID).text(_dateformatter(_getStartDate(target))
             + ' → ' + _dateformatter(_getEndDate(target)));
+        }
     }
 
     function _dateformatter(date) {
@@ -473,7 +512,6 @@
                     Year: opts.DefaultValueYear,
                     DateValue: opts.DefaultValueDate
                 }, true);
-
             }
             else {
                 _goNow(target, true);
@@ -520,7 +558,7 @@
         //opts.DateType = values.DateType;
         //// 在 spanAmountYqmwDate 元素下查找对应 value 的 radio 并设置为选中
         //box.find('input[type="radio"][value="' + values.DateType + '"]').prop('checked', true);
-         
+        
         CheckIsCurrent(target);
         _dealDateInfo(target);
 
@@ -760,7 +798,7 @@
         var opts = $.data(target, 'YqmwSelect').options;
         var t = $(target);
         var dt = opts.DateType;       
-        
+
         opts._isSetting = true; // 在切换类型期间，防止_changeValue调用
 
         //if (!opts.ShowDateType) {
@@ -786,6 +824,14 @@
             box.find('.spanDayVal').show(); 
 
         }
+        else if (setdt === opts.DateTypes.AllValue) {             
+            box.find('.spanYear').hide();
+            box.find('.spanDateVal').hide(); 
+            box.find('.spanDayVal').hide();
+            // 隐藏按钮
+            var lastnownext = opts.LastNowNextBtnObjID ? $('#' + opts.LastNowNextBtnObjID) : $('#'+t.id + '-lastnownextbtn');
+            lastnownext.hide();
+        }
         else {
             box.find('.spanDayVal').hide(); 
             box.find('.spanYear').show(); 
@@ -795,6 +841,9 @@
             else {
                 box.find('.spanDateVal').show(); 
             }
+            // 显示按钮
+            var lastnownext = opts.LastNowNextBtnObjID ? $('#' + opts.LastNowNextBtnObjID) : $('#'+t.id + '-lastnownextbtn');
+            lastnownext.show();
         }
  
         _renderLastNextBtn(target);
