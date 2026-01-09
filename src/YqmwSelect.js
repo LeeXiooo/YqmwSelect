@@ -1,16 +1,19 @@
 ﻿/* 
   年，季度，月，周，天 组件
   如：上月，当月，本月 按纽功能，下拉框值的初始化等
- 
-*/
 
+ * @author  : Leo
+ * @doc     :  
+ * @version : 1.1
+ * @date    : 2026-1-09
+*/
  
 (function($){
     "use strict";
     var defaults = {
         DateTypes: {
             AllValue: 0,                    //类型配置全
-            AllShow: true,
+            AllShow: false,
             YearValue: 5,                   //类型配置年
             YearShow: true,
             QuarterValue: 4,                //类型配置季度  
@@ -99,14 +102,14 @@
             else {
                 box.find('.spanDateVal').show(); 
             }
-        }        
+        }
         if (opts.ShowLastNowNextBtn) {
             var lastnownext;
             if(opts.LastNowNextBtnObjID){
                 lastnownext = $('#' + opts.LastNowNextBtnObjID);
             }else{
-                t.append('<span id="'+t.id+'-lastnownextbtn"></span>');
-                lastnownext = $('#'+t.id + '-lastnownextbtn');
+                t.append('<span id="'+t[0].id+'-lastnownextbtn"></span>');
+                lastnownext = $('#'+t[0].id + '-lastnownextbtn');
             }
             //var lastnownext = opts.LastNowNextBtnObjID ? $('#' + opts.LastNowNextBtnObjID) : t;
             lastnownext.append('<a class="Yqmw-btnlast">上</a> <a class="Yqmw-btnnow">本</a> <a class="Yqmw-btnnext">下</a>');
@@ -191,7 +194,7 @@
             return false;
         }
 
-        var lastnownext = opts.LastNowNextBtnObjID ? $('#' + opts.LastNowNextBtnObjID) : $('#'+t.id + '-lastnownextbtn');
+        var lastnownext = opts.LastNowNextBtnObjID ? $('#' + opts.LastNowNextBtnObjID) : $('#'+t[0].id + '-lastnownextbtn');
 
         if (dt === opts.DateTypes.AllValue) {
             lastnownext.hide();
@@ -319,7 +322,7 @@
         if (!opts.ShowLastNowNextBtn) {
             return false;
         }
-        var lastnownext = opts.LastNowNextBtnObjID ? $('#' + opts.LastNowNextBtnObjID) : $('#'+t.id + '-lastnownextbtn');
+        var lastnownext = opts.LastNowNextBtnObjID ? $('#' + opts.LastNowNextBtnObjID) : $('#'+t[0].id + '-lastnownextbtn');
         var objbtnNow = lastnownext.find('a.Yqmw-btnnow');
         objbtnNow.linkbutton(iscurr ? 'disable' : 'enable');
         if (iscurr) {
@@ -829,7 +832,7 @@
             box.find('.spanDateVal').hide(); 
             box.find('.spanDayVal').hide();
             // 隐藏按钮
-            var lastnownext = opts.LastNowNextBtnObjID ? $('#' + opts.LastNowNextBtnObjID) : $('#'+t.id + '-lastnownextbtn');
+            var lastnownext = opts.LastNowNextBtnObjID ? $('#' + opts.LastNowNextBtnObjID) : $('#'+t[0].id + '-lastnownextbtn');
             lastnownext.hide();
         }
         else {
@@ -842,7 +845,7 @@
                 box.find('.spanDateVal').show(); 
             }
             // 显示按钮
-            var lastnownext = opts.LastNowNextBtnObjID ? $('#' + opts.LastNowNextBtnObjID) : $('#'+t.id + '-lastnownextbtn');
+            var lastnownext = opts.LastNowNextBtnObjID ? $('#' + opts.LastNowNextBtnObjID) : $('#'+t[0].id + '-lastnownextbtn');
             lastnownext.show();
         }
  

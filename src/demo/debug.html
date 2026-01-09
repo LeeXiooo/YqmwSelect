@@ -10,32 +10,13 @@
 	<script src="../YqmwSelect.js" type="text/javascript"></script>
 	<script type="text/javascript">
         $(document).ready(function () {             
-              initDebug1();   
+              initDebug1();
+              initDebug2();
+              initDebug3();   
         });
         function initDebug1(){
             $('#yqmwDebug1').YqmwSelect({
-                DateTypes: {
-                    AllValue: 0,
-                    AllShow: true,                    
-                    YearValue: 5,
-                    YearShow: true,
-                    QuarterValue: 4,
-                    QuarterShow: true,
-                    MonthValue: 3,
-                    MonthShow: true,
-                    WeekValue: 2,
-                    WeekShow: true,
-                    DayValue: 1,
-                    DayShow: true
-                },
-                DateType: 0,
-                //DateValObjID: 'demoDateBox',
-                //LastNowNextBtnObjID: 'demoDateButton',
-                ShowLastNowNextBtn: true,
-                ShowDateType: true,
-                //DateTypeObjID: 'demoDateType',
-                DateInfoObjID: 'debug1DateInfo',
-                ReadOnly: false,
+                DateInfoObjID: 'debug1DateInfo', 
                 CallMethod: function(){
                     console.log(new Date().getTime() + ' CallMethod called for ' + this.id);
                     $.messager.show({ 
@@ -51,7 +32,60 @@
             });
             $('#yqmwDebug1').YqmwSelect("goLast");  
         } 
-    </script>
+
+        function initDebug2(){
+            $('#yqmwDebug2').YqmwSelect({
+                DateTypes: {
+                    AllValue: 0,
+                    AllShow: true,                    
+                    YearValue: 5,
+                    YearShow: true,
+                    QuarterValue: 4,
+                    QuarterShow: true,
+                    MonthValue: 3,
+                    MonthShow: true,
+                    WeekValue: 2,
+                    WeekShow: true,
+                    DayValue: 1,
+                    DayShow: true
+                },
+                DateType: 5,
+                //DateValObjID: 'demoDateBox',
+                //LastNowNextBtnObjID: 'demoDateButton',
+                ShowLastNowNextBtn: true,
+                ShowDateType: true,
+                //DateTypeObjID: 'demoDateType',
+                DateInfoObjID: 'debug2DateInfo',
+                ReadOnly: false,
+                CallMethod: function(){
+                    console.log(new Date().getTime() + ' CallMethod called for ' + this.id);
+                    $.messager.show({ 
+                        title: 'ok',
+                        style:{
+                            right:'',
+                            top:'',
+                            bottom:-document.body.scrollTop-document.documentElement.scrollTop
+                        },                        
+                        msg: 'Method Called...'+this.id
+                    });
+                }
+            });
+            $('#yqmwDebug2').YqmwSelect("goNext");  
+        }
+        function initDebug3(){
+            $('#yqmwDebug3').YqmwSelect({
+                DateType: 0, 
+                DateInfoObjID: 'debug3DateInfo'
+            });
+        }
+    </script>    
+    <style type="text/css">
+        .yqmwDebug{
+            margin: 5px 30px;
+            padding: 20px;
+            border-bottom: 1px dotted #ccc;
+        }
+    </style> 
  </head>
 <body>
 <div>
@@ -59,6 +93,14 @@
         <span id="yqmwDebug1"></span>
         <span id="debug1DateInfo"></span>
     </div> 
+    <div class="yqmwDebug">
+        <span id="yqmwDebug2"></span>
+        <span id="debug2DateInfo"></span>
+    </div>
+    <div class="yqmwDebug">
+        <span id="yqmwDebug3"></span>
+        <span id="debug3DateInfo"></span>
+    </div>
 </div>
 </body>
 </html>    
